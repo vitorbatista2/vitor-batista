@@ -1,24 +1,42 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { SITE } from "@/data/profile";
+import { Header } from "@/components/site/Header";
+import {
+  AboutSection, ContactSection, EducationSection, ExperienceTimeline, Footer, HeroSection, ProjectsSection, SkillsSection,
+} from "@/components/site/Sections";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: SITE.title },
+      { name: "description", content: SITE.description },
+      { property: "og:title", content: SITE.title },
+      { property: "og:description", content: SITE.description },
+      { property: "og:type", content: "profile" },
+      { property: "og:locale", content: "pt_BR" },
+      { name: "twitter:card", content: "summary_large_image" },
+      ...(SITE.url ? [{ property: "og:url", content: SITE.url }] : []),
+    ],
+    links: SITE.url ? [{ rel: "canonical", href: `${SITE.url}/` }] : [],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground">Pular para o conteúdo</a>
+      <Header />
+      <main id="conteudo">
+        <HeroSection />
+        <AboutSection />
+        <ExperienceTimeline />
+        <SkillsSection />
+        <ProjectsSection />
+        <EducationSection />
+        <ContactSection />
+      </main>
+      <Footer />
+    </>
   );
 }
